@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html ng-app="myapp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Hello worker</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <script src="https://code.angularjs.org/1.3.9/angular.js"></script>
+    <script src="https://code.angularjs.org/1.3.9/angular-resource.js"></script>
+
+
+    <script src="client.js"></script>
+    <script>
+        function isright(obj){
+            var value=+obj.value.replace(/\D/g,'')||0;
+            if (value>10000) value=10000;
+            if (value<0) value=0;
+            obj.value=value;
+        }
+    </script>
+    <style>
+        .padding-top {
+            padding-top: 20px;
+        }
+        .selected {
+            background-color: lightgreen;
+        }
+    </style>
+
+</head>
+<body>
+<div class="row">
+    <hr/>
+</div>
+<div ng-controller="ClientsController" class="row">
+    <div class="col-md-3 col-md-offset-1">
+        <p><input ng-model="lastnames"> Lastname</p>
+        <p><input ng-model="namefirst"> Firstname</p>
+        <p><input ng-model="address"> Address</p>
+        <p><input ng-model="phone"> Phone</p>
+        <p><input ng-model="email"> Email</p>
+        <p><input type="date" ng-model="date"> Date</p>
+        <div class="padding-top" ng-init="deleteButtonDisabled = true">
+            <button type="button" class="btn btn-default" ng-click="add()">Add</button>
+            <button type="button" class="btn btn-default" ng-click="delete_client()"
+                    ng-disabled="deleteButtonDisabled">Delete
+            </button>
+            <button type="button" class="btn btn-default" ng-click="clear()">Clear</button>
+            <div>
+                <table class="table table-stripped table-hover">
+                    <tbody>
+                    <tr ng-repeat="client in clients | filter:namefirst | filter:lastnames"
+                        ng-click="selectClient(client)"
+                        ng-class="{selected: client.id == selectedRow}">
+                        <td>{{client.lastName}} {{client.firstName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div ng-controller="CarController">
+        <div class="col-md-4">
+            <p><input ng-model="make"> Make</p>
+            <p><input ng-model="model"> Model</p>
+            <p><input ng-model="year"> Year</p>
+            <p><input ng-model="vin"> VIN</p>
+            <div>
+                <div class="padding-top" ng-init="deleteButtonDisabled = true">
+                    <button type="button" class="btn btn-default" ng-click="updatecars()">Refresh</button>
+                    <button type="button" class="btn btn-default" ng-click="addcar()">Add</button>
+                    <button type="button" class="btn btn-default" ng-click="delete_car()"
+                            ng-disabled="deleteButtonDisabled">Delete
+                    </button>
+                    <div>
+                        <table class="table table-stripped table-hover">
+                            <tbody>
+                            <tr ng-repeat="car in cars"
+                                ng-click="selectCar(car)"
+                                ng-class="{selected: car.id == selectedRowCar}">
+                                <td>{{car.make}} {{car.model}} {{car.year}} {{car.vin}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" ng-controller="OrderController">
+            <p><input type="date" ng-model="dateOrder"> Date</p>
+            <p><input type="number" ng-model="amount" max=10000 size=5 onkeyup="isright(this)"> Amount</p>
+            <p><select ng-model="status" ng-options="c.name for c in colors"> Status</select></p>
+            <div>
+                <div class="padding-top" ng-init="deleteButtonDisabled = true">
+                    <button type="button" class="btn btn-default" ng-click="updateorders()">Refresh</button>
+                    <button type="button" class="btn btn-default" ng-click="addorder()">Add</button>
+                    <button type="button" class="btn btn-default" ng-click="deleteorder()"
+                            ng-disabled="deleteButtonDisabled">Delete
+                    </button>
+                    <div>
+                        <table class="table table-stripped table-hover">
+                            <tbody>
+                            <tr ng-repeat="order in orders"
+                                ng-click="selectOrder(order)"
+                                ng-class="{selected: order.id == selectedRowOrder}">
+                                <td>{{order.date}} {{order.amount}} {{order.status}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
